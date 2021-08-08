@@ -93,16 +93,19 @@ app
     // req.todoはミドルウェアにより指定されたIDのToDoとなる
     req.todo.completed = true;
     res.json(req.todo);
+    onUpdateTodos();
   })
   .delete((req, res) => {
     req.todo.completed = false;
     res.json(req.todo);
+    onUpdateTodos();
   });
 
 // ToDoの削除
 app.delete('/api/todos/:id(\\d+)', (req, res) => {
   todos = todos.filter((todo) => todo !== req.todo);
   res.status(204).end();
+  onUpdateTodos();
 });
 
 //エラーハンドリングミドルウェア(4つ引数をとる)
