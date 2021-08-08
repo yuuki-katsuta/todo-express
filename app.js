@@ -45,3 +45,16 @@ app.use((err, req, res, next) => {
   res.status(err.statusCode || 500).json({ error: err.message }); //ステータスコードを指定してレスポンスを返す
 });
 app.listen(3000);
+
+const next = require('next');
+const dev = process.env.NODE_ENV !== 'production';
+const nextApp = next({ dev });
+
+nextApp.prepare().then(
+  // pagesディレクトリ内の各Reactコンポーネントに対するサーバサイドルーティング
+  () => app.get('*', nextApp.getRequestHandler()),
+  (err) => {
+    console.error(err);
+    process.exit(1);
+  }
+);

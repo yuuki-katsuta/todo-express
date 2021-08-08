@@ -17,7 +17,7 @@ const pageLinks = Object.keys(pages).map((page, index) => (
   </Link>
 ));
 
-export default function Todos(props) {
+const Todos = (props) => {
   const { title, fetchQuery } = pages[props.page];
   const [todos, setTodos] = useState([]);
   useEffect(() => {
@@ -45,4 +45,6 @@ export default function Todos(props) {
       <div>{pageLinks}</div>
     </>
   );
-}
+};
+
+export default Todos;
