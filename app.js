@@ -39,6 +39,32 @@ app.post('/api/todos', (req, res, next) => {
   res.status(201).json(todos);
 });
 
+// 指定されたIDのToDoを取得するためのミドルウェア
+app.use('/api/todos/:id(\\d+)', (req, res, next) => {
+  const targetId = Number(req.params.id); // :idを取得
+  const todo = todos.find((todo) => todo.id === targetId);
+  if (!todo) {
+    const err = new Error('ToDo not found');
+    err.statusCode = 404;
+    return next(err);
+  }
+  req.todo = todo; //後続のハンドラから参照可能にする
+  next(); //ミドルウェアがレスポンスを返さない場合、後続のミドルウェアに処理を受け渡す
+});
+
+// ToDoのCompletedの設定、解除
+app
+  .route('/api/todos/:id(\\d+)/completed')
+  .put((req, res) => {
+    // req.todoはミドルウェアにより指定されたIDのToDoとなる
+    req.todo.completed = true;
+    res.json(req.todo);
+  })
+  .delete((req, res) => {
+    req.todo.completed = false;
+    res.json(req.todo);
+  });
+
 //エラーハンドリングミドルウェア(4つ引数をとる)
 app.use((err, req, res, next) => {
   console.log(err);
