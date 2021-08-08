@@ -65,6 +65,12 @@ app
     res.json(req.todo);
   });
 
+// ToDoの削除
+app.delete('/api/todos/:id(\\d+)', (req, res) => {
+  todos = todos.filter((todo) => todo !== req.todo);
+  res.status(204).end();
+});
+
 //エラーハンドリングミドルウェア(4つ引数をとる)
 app.use((err, req, res, next) => {
   console.log(err);
